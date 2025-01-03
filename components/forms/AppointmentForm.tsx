@@ -46,16 +46,17 @@ export const AppointmentForm = ({
     appointment || {};
 
   // Type annotation for form
-  const form: UseFormReturn<z.infer<typeof AppointmentFormValidation>> = useForm<z.infer<typeof AppointmentFormValidation>>({
-    resolver: zodResolver(AppointmentFormValidation),
-    defaultValues: {
-      primaryPhysician: primaryPhysician || "",
-      schedule: schedule ? new Date(schedule) : new Date(Date.now()),
-      reason: reason || "",
-      note: note || "",
-      cancellationReason: cancellationReason || "",
-    },
-  });
+  const form: UseFormReturn<z.infer<typeof AppointmentFormValidation>> =
+    useForm<z.infer<typeof AppointmentFormValidation>>({
+      resolver: zodResolver(AppointmentFormValidation),
+      defaultValues: {
+        primaryPhysician: primaryPhysician || "",
+        schedule: schedule ? new Date(schedule) : new Date(Date.now()),
+        reason: reason || "",
+        note: note || "",
+        cancellationReason: cancellationReason || "",
+      },
+    });
 
   // Type annotation for onSubmit function
   const onSubmit = async (
@@ -119,13 +120,93 @@ export const AppointmentForm = ({
       console.error("Error submitting appointment:", error);
 
       // Show a detailed error message in the console
-      toast.error(`Error: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+      toast.error(
+        `Error: ${
+          error instanceof Error ? error.message : "An unknown error occurred."
+        }`
+      );
 
       // Optionally, show a toast notification or alert here for user feedback
-      toast.error("There was an issue processing your appointment. Please try again.");
+      toast.error(
+        "There was an issue processing your appointment. Please try again."
+      );
     }
 
     setIsLoading(false);
+  };
+
+  const renderFormFields = () => {
+    if (type === "cancel") {
+      return (
+        <CustomFormField
+          fieldType={FormFieldType.TEXTAREA}
+          control={form.control}
+          name="cancellationReason"
+          label="Reason for cancellation"
+          placeholder="Urgent meeting came up"
+        />
+      );
+    }
+
+    return (
+      <>
+        <CustomFormField
+          fieldType={FormFieldType.SELECT}
+          control={form.control}
+          name="primaryPhysician"
+          label="Doctor"
+          placeholder="Select a doctor"
+        >
+          {Doctors.map((doctor, i) => (
+            <SelectItem key={doctor.name + i} value={doctor.name}>
+              <div className="flex cursor-pointer items-center gap-2">
+                <Image
+                  src={doctor.image}
+                  width={32}
+                  height={32}
+                  alt="doctor"
+                  className="rounded-full border border-dark-500"
+                />
+                <p>{doctor.name}</p>
+              </div>
+            </SelectItem>
+          ))}
+        </CustomFormField>
+
+        <CustomFormField
+          fieldType={FormFieldType.DATE_PICKER}
+          control={form.control}
+          name="schedule"
+          label="Expected appointment date"
+          showTimeSelect
+          dateFormat="MM/dd/yyyy  -  h:mm aa"
+        />
+
+        <div
+          className={`flex flex-col gap-6 ${
+            type === "create" && "xl:flex-row"
+          }`}
+        >
+          <CustomFormField
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="reason"
+            label="Appointment reason"
+            placeholder="Annual monthly check-up"
+            disabled={type === "schedule"}
+          />
+
+          <CustomFormField
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="note"
+            label="Comments/notes"
+            placeholder="Prefer afternoon appointments, if possible"
+            disabled={type === "schedule"}
+          />
+        </div>
+      </>
+    );
   };
 
   let buttonLabel;
@@ -152,75 +233,7 @@ export const AppointmentForm = ({
           </section>
         )}
 
-        {type !== "cancel" && (
-          <>
-            <CustomFormField
-              fieldType={FormFieldType.SELECT}
-              control={form.control}
-              name="primaryPhysician"
-              label="Doctor"
-              placeholder="Select a doctor"
-            >
-              {Doctors.map((doctor, i) => (
-                <SelectItem key={doctor.name + i} value={doctor.name}>
-                  <div className="flex cursor-pointer items-center gap-2">
-                    <Image
-                      src={doctor.image}
-                      width={32}
-                      height={32}
-                      alt="doctor"
-                      className="rounded-full border border-dark-500"
-                    />
-                    <p>{doctor.name}</p>
-                  </div>
-                </SelectItem>
-              ))}
-            </CustomFormField>
-
-            <CustomFormField
-              fieldType={FormFieldType.DATE_PICKER}
-              control={form.control}
-              name="schedule"
-              label="Expected appointment date"
-              showTimeSelect
-              dateFormat="MM/dd/yyyy  -  h:mm aa"
-            />
-
-            <div
-              className={`flex flex-col gap-6 ${
-                type === "create" && "xl:flex-row"
-              }`}
-            >
-              <CustomFormField
-                fieldType={FormFieldType.TEXTAREA}
-                control={form.control}
-                name="reason"
-                label="Appointment reason"
-                placeholder="Annual monthly check-up"
-                disabled={type === "schedule"}
-              />
-
-              <CustomFormField
-                fieldType={FormFieldType.TEXTAREA}
-                control={form.control}
-                name="note"
-                label="Comments/notes"
-                placeholder="Prefer afternoon appointments, if possible"
-                disabled={type === "schedule"}
-              />
-            </div>
-          </>
-        )}
-
-        {type === "cancel" && (
-          <CustomFormField
-            fieldType={FormFieldType.TEXTAREA}
-            control={form.control}
-            name="cancellationReason"
-            label="Reason for cancellation"
-            placeholder="Urgent meeting came up"
-          />
-        )}
+        {renderFormFields()}
 
         <SubmitButton
           isLoading={isLoading}
