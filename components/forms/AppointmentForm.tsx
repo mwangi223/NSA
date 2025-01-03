@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
+import { toast } from "react-toastify"; // Assuming you are using react-toastify for toast notifications
 
 import { SelectItem } from "@/components/ui/select";
 import { Doctors } from "@/constants";
@@ -45,17 +46,16 @@ export const AppointmentForm = ({
     appointment || {};
 
   // Type annotation for form
-  const form: UseFormReturn<z.infer<typeof AppointmentFormValidation>> =
-    useForm<z.infer<typeof AppointmentFormValidation>>({
-      resolver: zodResolver(AppointmentFormValidation),
-      defaultValues: {
-        primaryPhysician: primaryPhysician || "",
-        schedule: schedule ? new Date(schedule) : new Date(Date.now()),
-        reason: reason || "",
-        note: note || "",
-        cancellationReason: cancellationReason || "",
-      },
-    });
+  const form: UseFormReturn<z.infer<typeof AppointmentFormValidation>> = useForm<z.infer<typeof AppointmentFormValidation>>({
+    resolver: zodResolver(AppointmentFormValidation),
+    defaultValues: {
+      primaryPhysician: primaryPhysician || "",
+      schedule: schedule ? new Date(schedule) : new Date(Date.now()),
+      reason: reason || "",
+      note: note || "",
+      cancellationReason: cancellationReason || "",
+    },
+  });
 
   // Type annotation for onSubmit function
   const onSubmit = async (
@@ -116,7 +116,13 @@ export const AppointmentForm = ({
         }
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error submitting appointment:", error);
+
+      // Show a detailed error message in the console
+      toast.error(`Error: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+
+      // Optionally, show a toast notification or alert here for user feedback
+      toast.error("There was an issue processing your appointment. Please try again.");
     }
 
     setIsLoading(false);
