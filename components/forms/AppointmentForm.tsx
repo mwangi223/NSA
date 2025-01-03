@@ -61,7 +61,7 @@ export const AppointmentForm = ({
     setIsLoading(true);
 
     let status: Status;
-    let timeZone = "America/New_York"; // Replace with your logic to determine time zone
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone; // Dynamically get the user's timezone
 
     // Refactored status determination logic
     status =
