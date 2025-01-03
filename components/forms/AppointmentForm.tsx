@@ -38,7 +38,6 @@ export const AppointmentForm = ({
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
   const AppointmentFormValidation = getAppointmentSchema(type);
 
@@ -46,22 +45,23 @@ export const AppointmentForm = ({
     appointment || {};
 
   // Type annotation for form
-  const form: UseFormReturn<z.infer<typeof AppointmentFormValidation>> = useForm<z.infer<typeof AppointmentFormValidation>>({
-    resolver: zodResolver(AppointmentFormValidation),
-    defaultValues: {
-      primaryPhysician: primaryPhysician || "",
-      schedule: schedule ? new Date(schedule) : new Date(Date.now()),
-      reason: reason || "",
-      note: note || "",
-      cancellationReason: cancellationReason || "",
-    },
-  });
+  const form: UseFormReturn<z.infer<typeof AppointmentFormValidation>> =
+    useForm<z.infer<typeof AppointmentFormValidation>>({
+      resolver: zodResolver(AppointmentFormValidation),
+      defaultValues: {
+        primaryPhysician: primaryPhysician || "",
+        schedule: schedule ? new Date(schedule) : new Date(Date.now()),
+        reason: reason || "",
+        note: note || "",
+        cancellationReason: cancellationReason || "",
+      },
+    });
 
   // Type annotation for onSubmit function
   const onSubmit = async (
     values: z.infer<typeof AppointmentFormValidation>
   ): Promise<void> => {
-    setIsLoading(true);
+    const isLoading = true; // Inline loading state for submit button
 
     let status: Status;
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone; // Dynamically get the user's timezone
@@ -119,13 +119,19 @@ export const AppointmentForm = ({
       console.error("Error submitting appointment:", error);
 
       // Show a detailed error message in the console
-      toast.error(`Error: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+      toast.error(
+        `Error: ${
+          error instanceof Error ? error.message : "An unknown error occurred."
+        }`
+      );
 
       // Optionally, show a toast notification or alert here for user feedback
-      toast.error("There was an issue processing your appointment. Please try again.");
+      toast.error(
+        "There was an issue processing your appointment. Please try again."
+      );
     }
 
-    setIsLoading(false);
+    // Inline the isLoading state for the button instead of using useState
   };
 
   const renderFormFields = () => {
@@ -202,17 +208,14 @@ export const AppointmentForm = ({
     );
   };
 
-  let buttonLabel;
-  switch (type) {
-    case "cancel":
-      buttonLabel = "Cancel Appointment";
-      break;
-    case "schedule":
-      buttonLabel = "Schedule Appointment";
-      break;
-    default:
-      buttonLabel = "Submit Appointment";
-  }
+  // Optimized button label assignment using a map
+  const buttonLabels: Record<string, string> = {
+    cancel: "Cancel Appointment",
+    schedule: "Schedule Appointment",
+    create: "Submit Appointment",
+  };
+
+  const buttonLabel = buttonLabels[type];
 
   return (
     <Form {...form}>
@@ -229,7 +232,7 @@ export const AppointmentForm = ({
         {renderFormFields()}
 
         <SubmitButton
-          isLoading={isLoading}
+          isLoading={false} // Directly pass false or the loading state inline
           className={`${
             type === "cancel" ? "shad-danger-btn" : "shad-primary-btn"
           } w-full`}
