@@ -44,7 +44,7 @@ export const AppointmentForm = ({
       primaryPhysician: appointment ? appointment.primaryPhysician : "",
       schedule: appointment ? new Date(appointment.schedule) : new Date(Date.now()),
       reason: appointment ? appointment.reason : "",
-      note: appointment?.note || "",
+      note: appointment ? appointment.note : "",
       cancellationReason: appointment?.cancellationReason || "",
     },
   });
@@ -54,19 +54,11 @@ export const AppointmentForm = ({
   ) => {
     setIsLoading(true);
 
-    let status;
+    let status: Status;
     let timeZone = "America/New_York"; // Replace with your logic to determine time zone
 
-    switch (type) {
-      case "schedule":
-        status = "scheduled";
-        break;
-      case "cancel":
-        status = "cancelled";
-        break;
-      default:
-        status = "pending";
-    }
+    // Refactored status determination logic
+    status = type === "schedule" ? "scheduled" : type === "cancel" ? "cancelled" : "pending";
 
     try {
       if (type === "create" && patientId) {
@@ -76,7 +68,7 @@ export const AppointmentForm = ({
           primaryPhysician: values.primaryPhysician,
           schedule: new Date(values.schedule),
           reason: values.reason!,
-          status: status as Status,
+          status: status,
           note: values.note,
         };
 
@@ -94,7 +86,7 @@ export const AppointmentForm = ({
           appointment: {
             primaryPhysician: values.primaryPhysician,
             schedule: new Date(values.schedule),
-            status: status as Status,
+            status: status,
             cancellationReason: values.cancellationReason,
           },
           type,
