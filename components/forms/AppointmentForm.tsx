@@ -18,7 +18,10 @@ import CustomFormField from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
 import { Form } from "../ui/form";
 import { FormFieldType } from "@/types";
-import { createAppointment, updateAppointment } from "@/lib/actions/appointment.actions";
+import {
+  createAppointment,
+  updateAppointment,
+} from "@/lib/actions/appointment.actions";
 
 export const AppointmentForm = ({
   userId,
@@ -38,14 +41,17 @@ export const AppointmentForm = ({
 
   const AppointmentFormValidation = getAppointmentSchema(type);
 
+  const { primaryPhysician, schedule, reason, note, cancellationReason } =
+    appointment || {};
+
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryPhysician: appointment ? appointment.primaryPhysician : "",
-      schedule: appointment ? new Date(appointment.schedule) : new Date(Date.now()),
-      reason: appointment ? appointment.reason : "",
-      note: appointment ? appointment.note : "",
-      cancellationReason: appointment?.cancellationReason || "",
+      primaryPhysician: primaryPhysician || "",
+      schedule: schedule ? new Date(schedule) : new Date(Date.now()),
+      reason: reason || "",
+      note: note || "",
+      cancellationReason: cancellationReason || "",
     },
   });
 
@@ -58,7 +64,12 @@ export const AppointmentForm = ({
     let timeZone = "America/New_York"; // Replace with your logic to determine time zone
 
     // Refactored status determination logic
-    status = type === "schedule" ? "scheduled" : type === "cancel" ? "cancelled" : "pending";
+    status =
+      type === "schedule"
+        ? "scheduled"
+        : type === "cancel"
+        ? "cancelled"
+        : "pending";
 
     try {
       if (type === "create" && patientId) {
@@ -76,7 +87,9 @@ export const AppointmentForm = ({
 
         if (newAppointment) {
           form.reset();
-          router.push(`/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`);
+          router.push(
+            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
+          );
         }
       } else if (appointment) {
         const appointmentToUpdate = {
@@ -124,7 +137,9 @@ export const AppointmentForm = ({
         {type === "create" && (
           <section className="mb-12 space-y-4">
             <h1 className="header">New Appointment</h1>
-            <p className="text-dark-700">Request a new appointment in 10 seconds.</p>
+            <p className="text-dark-700">
+              Request a new appointment in 10 seconds.
+            </p>
           </section>
         )}
 
@@ -162,7 +177,11 @@ export const AppointmentForm = ({
               dateFormat="MM/dd/yyyy  -  h:mm aa"
             />
 
-            <div className={`flex flex-col gap-6 ${type === "create" && "xl:flex-row"}`}>
+            <div
+              className={`flex flex-col gap-6 ${
+                type === "create" && "xl:flex-row"
+              }`}
+            >
               <CustomFormField
                 fieldType={FormFieldType.TEXTAREA}
                 control={form.control}
@@ -196,7 +215,9 @@ export const AppointmentForm = ({
 
         <SubmitButton
           isLoading={isLoading}
-          className={`${type === "cancel" ? "shad-danger-btn" : "shad-primary-btn"} w-full`}
+          className={`${
+            type === "cancel" ? "shad-danger-btn" : "shad-primary-btn"
+          } w-full`}
         >
           {buttonLabel}
         </SubmitButton>
