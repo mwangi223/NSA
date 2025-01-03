@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 
 import { SelectItem } from "@/components/ui/select";
@@ -44,20 +44,23 @@ export const AppointmentForm = ({
   const { primaryPhysician, schedule, reason, note, cancellationReason } =
     appointment || {};
 
-  const form = useForm<z.infer<typeof AppointmentFormValidation>>({
-    resolver: zodResolver(AppointmentFormValidation),
-    defaultValues: {
-      primaryPhysician: primaryPhysician || "",
-      schedule: schedule ? new Date(schedule) : new Date(Date.now()),
-      reason: reason || "",
-      note: note || "",
-      cancellationReason: cancellationReason || "",
-    },
-  });
+  // Type annotation for form
+  const form: UseFormReturn<z.infer<typeof AppointmentFormValidation>> =
+    useForm<z.infer<typeof AppointmentFormValidation>>({
+      resolver: zodResolver(AppointmentFormValidation),
+      defaultValues: {
+        primaryPhysician: primaryPhysician || "",
+        schedule: schedule ? new Date(schedule) : new Date(Date.now()),
+        reason: reason || "",
+        note: note || "",
+        cancellationReason: cancellationReason || "",
+      },
+    });
 
+  // Type annotation for onSubmit function
   const onSubmit = async (
     values: z.infer<typeof AppointmentFormValidation>
-  ) => {
+  ): Promise<void> => {
     setIsLoading(true);
 
     let status: Status;
