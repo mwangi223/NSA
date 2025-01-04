@@ -2,8 +2,8 @@
 import { E164Number } from "libphonenumber-js/core";
 import Image from "next/image";
 import ReactDatePicker from "react-datepicker";
-import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 // Import your custom components
 import {
@@ -12,12 +12,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from './ui/form';
-import { Input } from './ui/input';
-import { Checkbox } from './ui/checkbox'; 
-import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select'; 
-import { Textarea } from './ui/textarea';
-import { CustomProps, FormFieldType } from '@/types';
+} from "./ui/form";
+import { Input } from "./ui/input";
+import { Checkbox } from "./ui/checkbox";
+import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
+import { Textarea } from "./ui/textarea";
+import { CustomProps, FormFieldType } from "@/types";
 
 // RenderInput Component
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
@@ -30,7 +30,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
               src={props.iconSrc}
               height={24}
               width={24}
-              alt={props.iconAlt || 'icon'}
+              alt={props.iconAlt || "icon"}
               className="ml-2"
             />
           )}
@@ -38,7 +38,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             <Input
               placeholder={props.placeholder}
               {...field}
-              className="shad-input border-0 text-blue-200"
+              className="shad-input border-0 text-lightBlue" 
             />
           </FormControl>
         </div>
@@ -49,7 +49,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
           <Textarea
             placeholder={props.placeholder}
             {...field}
-            className="shad-textArea text-blue-200"
+            className="shad-textArea text-lightBlue" 
             disabled={props.disabled}
           />
         </FormControl>
@@ -64,7 +64,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             withCountryCallingCode
             value={field.value as E164Number | undefined}
             onChange={field.onChange}
-            className="input-phone text-blue-200"
+            className="input-phone text-lightBlue"
           />
         </FormControl>
       );
@@ -97,11 +97,17 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             <ReactDatePicker
               showTimeSelect={props.showTimeSelect ?? false}
               selected={field.value}
-              onChange={(date: Date | null, event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement> | undefined) => {
+              onChange={(
+                date: Date | null,
+                event:
+                  | React.MouseEvent<HTMLElement>
+                  | React.KeyboardEvent<HTMLElement>
+                  | undefined
+              ) => {
                 field.onChange(date); // Pass the date value to field.onChange
               }}
               timeInputLabel="Time:"
-              dateFormat={props.dateFormat ?? 'MM/dd/yyyy'}
+              dateFormat={props.dateFormat ?? "MM/dd/yyyy"}
               wrapperClassName="date-picker"
             />
           </FormControl>
