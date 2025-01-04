@@ -351,7 +351,7 @@ const RegisterForm = ({ user }: { user: User }) => {
         </section>
 
         <section className="flex justify-end gap-2 pt-8">
-          <SubmitButton isLoading={isLoading} />
+          <SubmitButton isLoading={isLoading} children={undefined} />
         </section>
       </form>
     </Form>
