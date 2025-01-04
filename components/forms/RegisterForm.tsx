@@ -9,7 +9,6 @@ import { z } from "zod";
 
 import { Form, FormControl, CustomFormField } from "@/components/ui/form"; // Combined import
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SelectItem } from "@/components/ui/select";
 import {
   Doctors,
@@ -26,7 +25,6 @@ import "react-phone-number-input/style.css";
 import FileUploader from "../FileUploader";
 import { FormFieldType } from "@/types";
 import SubmitButton from "../SubmitButton";
-import { RegisterUserParams } from "@/types/appwrite.types";
 import { User } from "@/types/index.d";
 
 // Import reusable components
