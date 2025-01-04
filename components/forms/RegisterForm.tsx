@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Form, FormControl } from "@/components/ui/form";
+import { Form, FormControl, CustomFormField } from "@/components/ui/form"; // Combined import
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SelectItem } from "@/components/ui/select";
@@ -23,12 +23,10 @@ import { PatientFormValidation } from "@/lib/validation";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-phone-number-input/style.css";
 import FileUploader from "../FileUploader";
-import CustomFormField from "../CustomFormField";
 import { FormFieldType } from "@/types";
 import SubmitButton from "../SubmitButton";
 import { RegisterUserParams } from "@/types/appwrite.types";
 import { User } from "@/types/index.d";
-
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -47,10 +45,12 @@ const RegisterForm = ({ user }: { user: User }) => {
   const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
 
-    // Extract the file if it exists
     let identificationDocument: File | undefined;
 
-    if (values.identificationDocument && values.identificationDocument.length > 0) {
+    if (
+      values.identificationDocument &&
+      values.identificationDocument.length > 0
+    ) {
       identificationDocument = values.identificationDocument[0]; // This should be a File
     }
 
@@ -79,7 +79,6 @@ const RegisterForm = ({ user }: { user: User }) => {
         privacyConsent: values.privacyConsent,
       };
 
-      // Call your API function with the correctly typed patient object
       const newPatient = await registerPatient(patient);
 
       if (newPatient) {
@@ -96,7 +95,10 @@ const RegisterForm = ({ user }: { user: User }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-12">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex-1 space-y-12"
+      >
         <section className="space-y-4">
           <h1 className="header">Welcome 👋</h1>
           <p className="text-dark-700">Let us know more about yourself.</p>
