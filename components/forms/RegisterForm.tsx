@@ -19,7 +19,7 @@ import {
 } from "@/constants";
 import { registerPatient } from "@/lib/actions/patient.actions";
 import { PatientFormValidation } from "@/lib/validation";
-import { createPatientObject } from "@/utils/patientUtils"
+import { createPatientObject } from "@/utils/patientUtils";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "react-phone-number-input/style.css";
@@ -28,6 +28,10 @@ import { FormFieldType } from "@/types";
 import SubmitButton from "../SubmitButton";
 import { RegisterUserParams } from "@/types/appwrite.types";
 import { User } from "@/types/index.d";
+
+// Import reusable components
+import RadioGroupField from "@/components/RadioGroupField";
+import SelectField from "@/components/SelectField";
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -45,19 +49,22 @@ const RegisterForm = ({ user }: { user: User }) => {
 
   const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
-  
+
     try {
       const patient = createPatientObject(values, user); // Create the patient object
-  
+
       const newPatient = await registerPatient(patient);
-  
+
       if (newPatient) {
         router.push(`/patients/${user.$id}/new-appointment`);
       } else {
         console.error("Failed to create new patient. Check the API.");
       }
     } catch (error: any) {
-      console.error("Error during patient registration:", error.message || error);
+      console.error(
+        "Error during patient registration:",
+        error.message || error
+      );
     } finally {
       setIsLoading(false);
     }
@@ -117,30 +124,20 @@ const RegisterForm = ({ user }: { user: User }) => {
               name="birthDate"
               label="Date of birth"
             />
-            <CustomFormField
-              fieldType={FormFieldType.SKELETON}
-              control={form.control}
-              name="gender"
-              label="Gender"
-              renderSkeleton={(field) => (
-                <FormControl>
-                  <RadioGroup
-                    className="flex h-11 gap-6 xl:justify-between"
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    {GenderOptions.map((option, i) => (
-                      <div key={option + i} className="radio-group">
-                        <RadioGroupItem value={option} id={option} />
-                        <Label htmlFor={option} className="cursor-pointer">
-                          {option}
-                        </Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-              )}
-            />
+            {/* Use the RadioGroupField component for gender */}
+            <div className="flex flex-col gap-6 xl:flex-row">
+              <CustomFormField
+                fieldType={FormFieldType.SKELETON}
+                control={form.control}
+                name="gender"
+                label="Gender"
+                renderSkeleton={(field) => (
+                  <FormControl>
+                    <RadioGroupField options={GenderOptions} name="gender" />
+                  </FormControl>
+                )}
+              />
+            </div>
           </div>
 
           {/* Address & Occupation */}
@@ -152,12 +149,9 @@ const RegisterForm = ({ user }: { user: User }) => {
               label="Address"
               placeholder="14th street, Eldoret, Eld - 1001"
             />
-            <CustomFormField
-              fieldType={FormFieldType.INPUT}
-              control={form.control}
+            <SelectField
+              options={["Software Engineer", "Doctor", "Teacher", "Artist"]}
               name="occupation"
-              label="Occupation"
-              placeholder="Software Engineer"
             />
           </div>
 
@@ -288,50 +282,24 @@ const RegisterForm = ({ user }: { user: User }) => {
             control={form.control}
             name="identificationNumber"
             label="Identification Number"
-            placeholder="123456789"
-          />
-
-          <CustomFormField
-            fieldType={FormFieldType.SKELETON}
-            control={form.control}
-            name="identificationDocument"
-            label="Scanned Copy of Identification Document"
-            renderSkeleton={(field) => (
-              <FormControl>
-                <FileUploader files={field.value} onChange={field.onChange} />
-              </FormControl>
-            )}
+            placeholder="1234567890"
           />
         </section>
 
         <section className="space-y-6">
           <div className="mb-9 space-y-1">
-            <h2 className="sub-header">Consent and Privacy</h2>
+            <h2 className="sub-header">Upload Profile Image</h2>
           </div>
-
-          <CustomFormField
-            fieldType={FormFieldType.CHECKBOX}
+          <FileUploader
+            name="profileImage"
             control={form.control}
-            name="treatmentConsent"
-            label="I consent to receive treatment for my health condition."
-          />
-
-          <CustomFormField
-            fieldType={FormFieldType.CHECKBOX}
-            control={form.control}
-            name="disclosureConsent"
-            label="I consent to the use and disclosure of my health information for treatment purposes."
-          />
-
-          <CustomFormField
-            fieldType={FormFieldType.CHECKBOX}
-            control={form.control}
-            name="privacyConsent"
-            label="I acknowledge that I have reviewed and agree to the privacy policy."
+            label="Upload your profile picture"
           />
         </section>
 
-        <SubmitButton isLoading={isLoading}>Submit and Continue</SubmitButton>
+        <section className="flex justify-end gap-2 pt-8">
+          <SubmitButton isLoading={isLoading} />
+        </section>
       </form>
     </Form>
   );
