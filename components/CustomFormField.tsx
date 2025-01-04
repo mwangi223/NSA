@@ -1,11 +1,9 @@
-/* eslint-disable no-unused-vars */
 import { E164Number } from "libphonenumber-js/core";
 import Image from "next/image";
 import ReactDatePicker from "react-datepicker";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 
-// Import your custom components
 import {
   FormControl,
   FormField,
@@ -19,7 +17,6 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
 import { Textarea } from "./ui/textarea";
 import { CustomProps, FormFieldType } from "@/types";
 
-// RenderInput Component
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
   switch (props.fieldType) {
     case FormFieldType.INPUT:
@@ -38,7 +35,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             <Input
               placeholder={props.placeholder}
               {...field}
-              className="shad-input border-0 text-lightBlue" 
+              className="shad-input border-0 text-blue-100" // Changed to text-blue-100
             />
           </FormControl>
         </div>
@@ -49,7 +46,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
           <Textarea
             placeholder={props.placeholder}
             {...field}
-            className="shad-textArea text-lightBlue" 
+            className="shad-textArea text-blue-100" // Changed to text-blue-100
             disabled={props.disabled}
           />
         </FormControl>
@@ -64,7 +61,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             withCountryCallingCode
             value={field.value as E164Number | undefined}
             onChange={field.onChange}
-            className="input-phone text-lightBlue"
+            className="input-phone text-blue-100" // Changed to text-blue-100
           />
         </FormControl>
       );
@@ -135,7 +132,6 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
   }
 };
 
-// CustomFormField Component
 const CustomFormField = (props: CustomProps) => {
   const { control, name, label } = props;
 
