@@ -49,7 +49,7 @@
     }
   
     .header {
-      @apply text-32-bold md:text-36-bold;
+      @apply text-32-bold md:text-36-bold text-blue-200;
     }
   
     .sub-header {
