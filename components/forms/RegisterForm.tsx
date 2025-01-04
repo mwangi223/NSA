@@ -42,43 +42,63 @@ const RegisterForm = ({ user }: { user: User }) => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
+  const onSubmit = async ({
+    name,
+    email,
+    phone,
+    birthDate,
+    gender,
+    address,
+    occupation,
+    emergencyContactName,
+    emergencyContactNumber,
+    primaryPhysician,
+    insuranceProvider,
+    insurancePolicyNumber,
+    allergies,
+    currentMedication,
+    familyMedicalHistory,
+    pastMedicalHistory,
+    identificationType,
+    identificationNumber,
+    identificationDocument,
+    privacyConsent,
+  }: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
 
-    let identificationDocument: File | undefined;
+    // Extract the file if it exists
+    let identificationDocumentFile: File | undefined;
 
-    if (
-      values.identificationDocument &&
-      values.identificationDocument.length > 0
-    ) {
-      identificationDocument = values.identificationDocument[0]; // This should be a File
+    if (identificationDocument && identificationDocument.length > 0) {
+      identificationDocumentFile = identificationDocument[0]; // This should be a File
     }
 
     try {
       const patient: RegisterUserParams = {
         userId: user.$id,
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
-        birthDate: new Date(values.birthDate),
-        gender: values.gender,
-        address: values.address,
-        occupation: values.occupation,
-        emergencyContactName: values.emergencyContactName,
-        emergencyContactNumber: values.emergencyContactNumber,
-        primaryPhysician: values.primaryPhysician,
-        insuranceProvider: values.insuranceProvider,
-        insurancePolicyNumber: values.insurancePolicyNumber,
-        allergies: values.allergies,
-        currentMedication: values.currentMedication,
-        familyMedicalHistory: values.familyMedicalHistory,
-        pastMedicalHistory: values.pastMedicalHistory,
-        identificationType: values.identificationType,
-        identificationNumber: values.identificationNumber,
-        identificationDocument, // Ensure this is a File or undefined
-        privacyConsent: values.privacyConsent,
+        name,
+        email,
+        phone,
+        birthDate: new Date(birthDate),
+        gender,
+        address,
+        occupation,
+        emergencyContactName,
+        emergencyContactNumber,
+        primaryPhysician,
+        insuranceProvider,
+        insurancePolicyNumber,
+        allergies,
+        currentMedication,
+        familyMedicalHistory,
+        pastMedicalHistory,
+        identificationType,
+        identificationNumber,
+        identificationDocument: identificationDocumentFile, // Ensure this is a File or undefined
+        privacyConsent,
       };
 
+      // Call your API function with the correctly typed patient object
       const newPatient = await registerPatient(patient);
 
       if (newPatient) {
