@@ -19,6 +19,7 @@ import {
 } from "@/constants";
 import { registerPatient } from "@/lib/actions/patient.actions";
 import { PatientFormValidation } from "@/lib/validation";
+import { createPatientObject } from "@/utils/patientUtils"
 
 import "react-datepicker/dist/react-datepicker.css";
 import "react-phone-number-input/style.css";
@@ -42,74 +43,21 @@ const RegisterForm = ({ user }: { user: User }) => {
     },
   });
 
-  const onSubmit = async ({
-    name,
-    email,
-    phone,
-    birthDate,
-    gender,
-    address,
-    occupation,
-    emergencyContactName,
-    emergencyContactNumber,
-    primaryPhysician,
-    insuranceProvider,
-    insurancePolicyNumber,
-    allergies,
-    currentMedication,
-    familyMedicalHistory,
-    pastMedicalHistory,
-    identificationType,
-    identificationNumber,
-    identificationDocument,
-    privacyConsent,
-  }: z.infer<typeof PatientFormValidation>) => {
+  const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
-
-    // Extract the file if it exists
-    let identificationDocumentFile: File | undefined;
-
-    if (identificationDocument && identificationDocument.length > 0) {
-      identificationDocumentFile = identificationDocument[0]; // This should be a File
-    }
-
+  
     try {
-      const patient: RegisterUserParams = {
-        userId: user.$id,
-        name,
-        email,
-        phone,
-        birthDate: new Date(birthDate),
-        gender,
-        address,
-        occupation,
-        emergencyContactName,
-        emergencyContactNumber,
-        primaryPhysician,
-        insuranceProvider,
-        insurancePolicyNumber,
-        allergies,
-        currentMedication,
-        familyMedicalHistory,
-        pastMedicalHistory,
-        identificationType,
-        identificationNumber,
-        identificationDocument: identificationDocumentFile, // Ensure this is a File or undefined
-        privacyConsent,
-      };
-
+      const patient = createPatientObject(values, user); // Create the patient object
+  
       const newPatient = await registerPatient(patient);
-
+  
       if (newPatient) {
         router.push(`/patients/${user.$id}/new-appointment`);
       } else {
         console.error("Failed to create new patient. Check the API.");
       }
     } catch (error: any) {
-      console.error(
-        "Error during patient registration:",
-        error.message || error
-      );
+      console.error("Error during patient registration:", error.message || error);
     } finally {
       setIsLoading(false);
     }
