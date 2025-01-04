@@ -98,16 +98,18 @@ const RegisterForm = ({ user }: { user: User }) => {
         privacyConsent,
       };
 
-      // Call your API function with the correctly typed patient object
       const newPatient = await registerPatient(patient);
 
       if (newPatient) {
         router.push(`/patients/${user.$id}/new-appointment`);
       } else {
-        console.error("Failed to create new patient.");
+        console.error("Failed to create new patient. Check the API.");
       }
-    } catch (error) {
-      console.error("Error during patient registration:", error);
+    } catch (error: any) {
+      console.error(
+        "Error during patient registration:",
+        error.message || error
+      );
     } finally {
       setIsLoading(false);
     }
