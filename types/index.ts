@@ -32,6 +32,9 @@ export interface ButtonProps {
 }
 
 export type FileUploaderProps = {
+  name: string;
+  control: Control<any>;
+  label: string;
   files: File[] | undefined;
   onChange: (files: File[]) => void;
 };
