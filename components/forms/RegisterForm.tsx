@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Form, FormControl, CustomFormField } from "@/components/ui/form"; // Combined import
+import { Form, FormControl } from "@/components/ui/form"; // Combined import
 import { Label } from "@/components/ui/label";
 import { SelectItem } from "@/components/ui/select";
 import {
@@ -30,6 +30,7 @@ import { User } from "@/types/index.d";
 // Import reusable components
 import RadioGroupField from "@/components/RadioGroupField";
 import SelectField from "@/components/SelectField";
+import CustomFormField from "../CustomFormField";
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
