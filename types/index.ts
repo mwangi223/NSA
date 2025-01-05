@@ -11,6 +11,7 @@ export enum FormFieldType {
 }
 
 export interface CustomProps {
+  id?: string; 
   control: Control<any>;
   name: string;
   label?: string;
@@ -24,7 +25,6 @@ export interface CustomProps {
   renderSkeleton?: (field: any) => React.ReactNode;
   fieldType: FormFieldType;
 }
-
 export interface ButtonProps {
   isLoading: boolean;
   className?: string;
