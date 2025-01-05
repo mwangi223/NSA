@@ -1,9 +1,10 @@
 import { Control } from "react-hook-form";
+import { FormData } from "@/types/formTypes";
 import { FormFieldType } from "@/types";
 import CustomFormField from "@/components/CustomFormField";
 import { Label } from "@/components/ui/label";
 
-const IdentificationSection = ({ control }: { control: Control }) => (
+const IdentificationSection = ({ control }: { control: Control<FormData> }) => (
   <section className="space-y-6">
     <div className="mb-9 space-y-1">
       <h2 className="sub-header">Identification and Verification</h2>
