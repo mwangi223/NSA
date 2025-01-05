@@ -33,6 +33,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
           )}
           <FormControl>
             <Input
+              id={props.id} // Use the id prop here
               placeholder={props.placeholder}
               {...field}
               className="shad-input border-0 text-blue-100" // Changed to text-blue-100
@@ -44,6 +45,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
       return (
         <FormControl>
           <Textarea
+            id={props.id} // Use the id prop here
             placeholder={props.placeholder}
             {...field}
             className="shad-textArea text-blue-100" // Changed to text-blue-100
@@ -55,6 +57,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
       return (
         <FormControl>
           <PhoneInput
+            id={props.id} // Use the id prop here
             defaultCountry="KE"
             placeholder={props.placeholder}
             international
@@ -70,11 +73,13 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
         <FormControl>
           <div className="flex items-center gap-4">
             <Checkbox
-              id={props.name}
+              id={props.id} // Use the id prop here
               checked={field.value}
               onCheckedChange={field.onChange}
             />
-            <label htmlFor={props.name} className="checkbox-label">
+            <label htmlFor={props.id} className="checkbox-label">
+              {" "}
+              {/* Use the id prop here */}
               {props.label}
             </label>
           </div>
@@ -92,6 +97,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
           />
           <FormControl>
             <ReactDatePicker
+              id={props.id} // Use the id prop here
               showTimeSelect={props.showTimeSelect ?? false}
               selected={field.value}
               onChange={(
@@ -115,7 +121,9 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
         <FormControl>
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>
-              <SelectTrigger className="shad-select-trigger">
+              <SelectTrigger className="shad-select-trigger" id={props.id}>
+                {" "}
+                {/* Use the id prop here */}
                 <SelectValue placeholder={props.placeholder} />
               </SelectTrigger>
             </FormControl>
