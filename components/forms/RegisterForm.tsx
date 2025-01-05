@@ -45,7 +45,10 @@ const RegisterForm = ({ user }: { user: User }) => {
         console.error("Failed to create new patient. Check the API.");
       }
     } catch (error: any) {
-      console.error("Error during patient registration:", error.message || error);
+      console.error(
+        "Error during patient registration:",
+        error.message || error
+      );
     } finally {
       setIsLoading(false);
     }
@@ -53,7 +56,10 @@ const RegisterForm = ({ user }: { user: User }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-12">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex-1 space-y-12"
+      >
         <section className="space-y-4">
           <h1 className="header">Welcome 👋</h1>
           <p className="text-dark-700">Let us know more about yourself.</p>
