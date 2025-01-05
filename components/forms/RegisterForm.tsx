@@ -13,11 +13,12 @@ import { registerPatient } from "@/lib/actions/patient.actions";
 import { PatientFormValidation } from "@/lib/validation";
 import { createPatientObject } from "@/lib/utils";
 
-import PersonalInformationSection from "./PersonalInformationSection";
-import MedicalInformationSection from "./MedicalInformationSection";
-import IdentificationSection from "./IdentificationSection";
-import ProfileImageUploader from "./ProfileImageUploader";
-import SubmitSection from "./SubmitSection";
+import PersonalInformationSection from "@/components/PersonalInformationSection";
+import MedicalInformationSection from "@/components/MedicalInformationSection";
+import IdentificationSection from "@/components/IdentificationSection";
+import ProfileImageUploader from "@/components/ProfileImageUploader";
+import SubmitSection from "@/components/SubmitSection";
+
 
 import { User } from "@/types/index.d";
 
