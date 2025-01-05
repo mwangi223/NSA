@@ -1,17 +1,14 @@
-// RegisterForm.tsx
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import { Form } from "@/components/ui/form";
 import { PatientFormDefaultValues } from "@/constants";
 import { registerPatient } from "@/lib/actions/patient.actions";
 import { PatientFormValidation } from "@/lib/validation";
 import { createPatientObject } from "@/lib/utils";
+import { FormData } from "@/types/formTypes";
 
 import PersonalInformationSection from "@/components/PersonalInformationSection";
 import MedicalInformationSection from "@/components/MedicalInformationSection";
@@ -19,14 +16,14 @@ import IdentificationSection from "@/components/IdentificationSection";
 import ProfileImageUploader from "@/components/ProfileImageUploader";
 import SubmitSection from "@/components/SubmitSection";
 
-
 import { User } from "@/types/index.d";
+import { Form } from "../ui/form";
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof PatientFormValidation>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(PatientFormValidation),
     defaultValues: {
       ...PatientFormDefaultValues,
@@ -36,7 +33,7 @@ const RegisterForm = ({ user }: { user: User }) => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
+  const onSubmit = async (values: FormData) => {
     setIsLoading(true);
     try {
       const patient = createPatientObject(values, user);
