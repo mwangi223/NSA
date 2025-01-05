@@ -1,5 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { z } from "zod";
+import { PatientFormValidation } from "@/lib/validation";
+import { User } from "@/types/index.d";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -103,6 +106,6 @@ export const createPatientObject = (
   pastMedicalHistory: values.pastMedicalHistory,
   identificationType: values.identificationType,
   identificationNumber: values.identificationNumber,
-  identificationDocument: values.identificationDocument?.[0], // Handle file if exists
+  identificationDocument: values.identificationDocument?.[0], 
   privacyConsent: values.privacyConsent,
 });
