@@ -11,11 +11,23 @@ const IdentificationSection = ({ control }: { control: Control }) => (
 
     <div>
       <Label htmlFor="identificationType">Identification Type</Label>
-      <CustomFormField id="identificationType" fieldType={FormFieldType.SELECT} control={control} name="identificationType" placeholder="Select identification type" />
+      <CustomFormField
+        id="identificationType"
+        fieldType={FormFieldType.SELECT}
+        control={control}
+        name="identificationType"
+        placeholder="Select identification type"
+      />
     </div>
     <div>
       <Label htmlFor="identificationNumber">Identification Number</Label>
-      <CustomFormField id="identificationNumber" fieldType={FormFieldType.INPUT} control={control} name="identificationNumber" placeholder="1234567890" />
+      <CustomFormField
+        id="identificationNumber"
+        fieldType={FormFieldType.INPUT}
+        control={control}
+        name="identificationNumber"
+        placeholder="1234567890"
+      />
     </div>
   </section>
 );
