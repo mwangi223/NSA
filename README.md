@@ -23,3 +23,10 @@ Babacare leverages modern web development tools and frameworks, including:
 - **Database**: MongoDB
 - **File Uploads**: UploadThing SDK
 - **Validation**: Zod for schema validation
+
+## Workflow
+
+1. **Patient Registration**: Users fill out a form with personal, medical, and identification details.
+2. **Data Validation**: Form inputs are validated using Zod schemas to ensure data integrity.
+3. **Data Storage**: Information is securely stored in MongoDB.
+4. **Appointments**: Patients can schedule appointments directly after registration.
