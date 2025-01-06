@@ -89,10 +89,11 @@ export const registerPatient = async ({
         fileUrl = `${ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${fileId}/view?project=${PROJECT_ID}`;
         console.info("File uploaded successfully:", fileUrl);
       } catch (fileError) {
-        console.error(
-          "Failed to upload the file:",
-          fileError.message || fileError
-        );
+        if (fileError instanceof Error) {
+          console.error("Failed to upload the file:", fileError.message);
+        } else {
+          console.error("Failed to upload the file:", fileError);
+        }
         throw new Error("File upload failed. Please try again.");
       }
     }
@@ -112,10 +113,14 @@ export const registerPatient = async ({
     console.info("New patient registered:", newPatient);
     return parseStringify(newPatient);
   } catch (error) {
-    console.error(
-      "An error occurred while registering the patient:",
-      error.message || error
-    );
+    if (error instanceof Error) {
+      console.error(
+        "An error occurred while registering the patient:",
+        error.message
+      );
+    } else {
+      console.error("An error occurred while registering the patient:", error);
+    }
     throw new Error("Unable to register patient. Please try again later.");
   }
 };
