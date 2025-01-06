@@ -3,6 +3,7 @@
 Babacare is a modern healthcare management system designed to streamline patient registration, medical records, and appointment scheduling. Built with cutting-edge technologies, it provides a seamless experience for both patients and healthcare providers.
 
 ## Mission
+
 To enhance the efficiency of healthcare delivery through technology, ensuring patients receive quality care and providers can focus on what matters most.
 
 ## Key Features
@@ -12,3 +13,13 @@ To enhance the efficiency of healthcare delivery through technology, ensuring pa
 - **Appointment Scheduling**: Simplify the process of booking and managing appointments.
 - **Profile Image Uploads**: Allow patients to upload profile pictures securely.
 - **User Authentication**: Secure login and role-based access control for providers and admins.
+
+## Technology Stack
+
+Babacare leverages modern web development tools and frameworks, including:
+
+- **Frontend**: Next.js, TypeScript, TailwindCSS
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB
+- **File Uploads**: UploadThing SDK
+- **Validation**: Zod for schema validation
