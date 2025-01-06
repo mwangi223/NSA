@@ -30,26 +30,28 @@ export const PatientForm = () => {
 
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
-
+    console.log("Submitting form...");
+  
     try {
-      const user = {
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
-      };
-
+      const user = { name: values.name, email: values.email, phone: values.phone };
+      console.log("User object:", user);
+  
       const newUser = await createUser(user);
-
-      if (newUser) {
+      console.log("New user created:", newUser);
+  
+      if (newUser?.$id) {
+        console.log("Redirecting to:", `/patients/${newUser.$id}/register`);
         router.push(`/patients/${newUser.$id}/register`);
+      } else {
+        console.error("User creation failed. Missing user ID.");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error during form submission:", error);
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
-
+  
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
