@@ -30,3 +30,10 @@ Babacare leverages modern web development tools and frameworks, including:
 2. **Data Validation**: Form inputs are validated using Zod schemas to ensure data integrity.
 3. **Data Storage**: Information is securely stored in MongoDB.
 4. **Appointments**: Patients can schedule appointments directly after registration.
+
+## Future Plans
+
+- **Integration with Telemedicine Platforms**: Enable virtual consultations.
+- **Analytics Dashboard**: Provide healthcare providers with insights into patient data.
+- **Multi-Language Support**: Cater to diverse user bases.
+- **Mobile App Development**: Extend Babacare’s reach to mobile devices.
