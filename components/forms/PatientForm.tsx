@@ -46,14 +46,14 @@ export const PatientForm = () => {
       if (!newUser?.$id) {
         console.error("User creation failed. Missing user ID.");
         alert("Failed to create user. Please try again.");
-        return; 
+        return;
       }
 
       console.log("Redirecting to:", `/patients/${newUser.$id}/register`);
       router.push(`/patients/${newUser.$id}/register`);
     } catch (error) {
       console.error("Error during form submission:", error);
-      alert("An error occurred. Please try again later.");
+      alert("An error occurred. Please try again later."); // User feedback added
     } finally {
       setIsLoading(false);
     }
