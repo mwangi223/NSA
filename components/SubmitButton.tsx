@@ -11,7 +11,6 @@ const SubmitButton = ({ isLoading, className, children }: ButtonProps) => {
       className={className ?? "shad-primary-btn w-full"}
     >
       {isLoading ? (
-        
         <div className="flex items-center gap-4">
           <Image
             src={`/assets/icons/loader.svg`}
