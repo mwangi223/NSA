@@ -30,7 +30,6 @@ export const PatientForm = () => {
 
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
-    console.log("Submitting form...");
 
     try {
       const user = {
@@ -38,6 +37,7 @@ export const PatientForm = () => {
         email: values.email,
         phone: values.phone,
       };
+
       console.log("User object:", user);
 
       const newUser = await createUser(user);
@@ -49,11 +49,10 @@ export const PatientForm = () => {
         return;
       }
 
-      console.log("Redirecting to:", `/patients/${newUser.$id}/register`);
       router.push(`/patients/${newUser.$id}/register`);
     } catch (error) {
       console.error("Error during form submission:", error);
-      alert("An error occurred. Please try again later."); // User feedback added
+      alert("An error occurred. Please try again later.");
     } finally {
       setIsLoading(false);
     }
