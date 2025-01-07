@@ -118,11 +118,12 @@ export const AppointmentForm = ({
         }
       }
     } catch (error: any) {
-      if (error.message.includes("Network")) {
+      if (error.message?.includes("Network")) {
         toast.error("Network error: Please check your connection.");
-      } else if (error.message.includes("Validation")) {
+      } else if (error.message?.includes("Validation")) {
         toast.error("Validation error: Please correct the highlighted fields.");
       } else {
+        console.error("Unhandled error:", error);
         toast.error("An unexpected error occurred. Please try again.");
       }
     }
