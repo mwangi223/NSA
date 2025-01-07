@@ -116,8 +116,6 @@ export const AppointmentForm = ({
         }
       }
     } catch (error) {
-      console.error("Error submitting appointment:", error);
-
       if (error instanceof NetworkError) {
         toast.error("Network error: Please check your connection.");
       } else if (error instanceof ValidationError) {
