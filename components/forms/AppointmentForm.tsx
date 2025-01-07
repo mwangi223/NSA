@@ -24,8 +24,16 @@ import {
   updateAppointment,
 } from "@/lib/actions/appointment.actions";
 
+type AppointmentType = "create" | "schedule" | "cancel";
+
+const buttonLabels: Record<AppointmentType, string> = {
+  cancel: "Cancel Appointment",
+  schedule: "Schedule Appointment",
+  create: "Submit Appointment",
+};
+
 // Utility function for determining status
-const determineStatus = (type: string): Status => {
+const determineStatus = (type: AppointmentType): Status => {
   switch (type) {
     case "schedule":
       return "scheduled";
@@ -45,7 +53,7 @@ export const AppointmentForm = ({
 }: {
   userId: string;
   patientId: string;
-  type: "create" | "schedule" | "cancel";
+  type: AppointmentType;
   appointment?: Appointment;
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
@@ -56,25 +64,23 @@ export const AppointmentForm = ({
   const { primaryPhysician, schedule, reason, note, cancellationReason } =
     appointment || {};
 
-  const defaultValues = {
-    primaryPhysician: primaryPhysician || "",
-    schedule: schedule ? new Date(schedule) : new Date(Date.now()),
-    reason: reason || "",
-    note: note || "",
-    cancellationReason: cancellationReason || "",
-  };
-
   const form: UseFormReturn<z.infer<typeof AppointmentFormValidation>> =
     useForm<z.infer<typeof AppointmentFormValidation>>({
       resolver: zodResolver(AppointmentFormValidation),
-      defaultValues,
+      defaultValues: {
+        primaryPhysician: primaryPhysician || "",
+        schedule: schedule ? new Date(schedule) : new Date(Date.now()),
+        reason: reason || "",
+        note: note || "",
+        cancellationReason: cancellationReason || "",
+      },
     });
 
   const onSubmit = async (
     values: z.infer<typeof AppointmentFormValidation>
   ): Promise<void> => {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const status = determineStatus(type);
+    const status = determineStatus(type); // Use the utility function here
 
     try {
       if (type === "create" && patientId) {
@@ -118,12 +124,11 @@ export const AppointmentForm = ({
         }
       }
     } catch (error: any) {
-      if (error.message?.includes("Network")) {
+      if (error.message.includes("Network")) {
         toast.error("Network error: Please check your connection.");
-      } else if (error.message?.includes("Validation")) {
+      } else if (error.message.includes("Validation")) {
         toast.error("Validation error: Please correct the highlighted fields.");
       } else {
-        console.error("Unhandled error:", error);
         toast.error("An unexpected error occurred. Please try again.");
       }
     }
@@ -201,12 +206,6 @@ export const AppointmentForm = ({
         </div>
       </>
     );
-  };
-
-  const buttonLabels: Record<string, string> = {
-    cancel: "Cancel Appointment",
-    schedule: "Schedule Appointment",
-    create: "Submit Appointment",
   };
 
   const buttonLabel = buttonLabels[type];
