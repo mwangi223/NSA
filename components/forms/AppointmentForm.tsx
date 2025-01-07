@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "react-toastify";
@@ -209,12 +209,12 @@ export const AppointmentForm = ({
     );
   };
 
+  const formFields = useMemo(() => renderFormFields(), [type, form.control]);
+
   const buttonClass = classNames({
     "shad-danger-btn w-full": type === "cancel",
     "shad-primary-btn w-full": type !== "cancel",
   });
-
-  const buttonLabel = buttonLabels[type];
 
   return (
     <Form {...form}>
@@ -228,10 +228,10 @@ export const AppointmentForm = ({
           </section>
         )}
 
-        {renderFormFields()}
+        {formFields}
 
         <SubmitButton isLoading={false} className={buttonClass}>
-          {buttonLabel}
+          {buttonLabels[type]}
         </SubmitButton>
       </form>
     </Form>
