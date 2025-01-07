@@ -1,4 +1,7 @@
 import * as sdk from "node-appwrite";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const {
   PROJECT_ID,
@@ -7,13 +10,18 @@ export const {
   PATIENT_COLLECTION_ID,
   DOCTOR_COLLECTION_ID,
   APPOINTMENT_COLLECTION_ID,
-  NEXT_PUBLIC_BUCKET_ID: BUCKET_ID,
-  NEXT_PUBLIC_ENDPOINT: ENDPOINT,
+  BUCKET_ID,
+  ENDPOINT,
+  ADMIN_PASSKEY,
 } = process.env;
 
-const client = new sdk.Client();
+// Ensure required variables are set
+if (!ENDPOINT || !PROJECT_ID || !API_KEY) {
+  throw new Error("Missing required Appwrite environment variables.");
+}
 
-client.setEndpoint(ENDPOINT!).setProject(PROJECT_ID!).setKey(API_KEY!);
+const client = new sdk.Client();
+client.setEndpoint(ENDPOINT).setProject(PROJECT_ID).setKey(API_KEY);
 
 export const databases = new sdk.Databases(client);
 export const users = new sdk.Users(client);
