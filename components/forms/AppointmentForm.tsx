@@ -25,6 +25,15 @@ import {
   updateAppointment,
 } from "@/lib/actions/appointment.actions";
 
+/**
+ * AppointmentForm Component
+ * @param userId - ID of the user creating the appointment
+ * @param patientId - ID of the patient for whom the appointment is being created
+ * @param type - Type of form (create, schedule, cancel)
+ * @param appointment - Existing appointment data (optional)
+ * @param setOpen - Function to toggle modal visibility (optional)
+ */
+
 // Utility function for determining status
 const determineStatus = (type: string): Status => {
   switch (type) {
