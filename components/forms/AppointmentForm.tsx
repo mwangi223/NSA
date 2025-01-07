@@ -233,6 +233,8 @@ export const AppointmentForm = ({
         <SubmitButton
           isLoading={form.formState.isSubmitting}
           className={buttonClass}
+          aria-label={buttonLabel}
+          role="button"
         >
           {buttonLabel}
         </SubmitButton>
