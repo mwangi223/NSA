@@ -3,10 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-import { toast } from "react-toastify"; // Assuming you are using react-toastify for toast notifications
+import { toast } from "react-toastify";
 
 import { SelectItem } from "@/components/ui/select";
 import { Doctors } from "@/constants";
@@ -23,6 +23,18 @@ import {
   createAppointment,
   updateAppointment,
 } from "@/lib/actions/appointment.actions";
+
+// Utility function for determining status
+const determineStatus = (type: string): Status => {
+  switch (type) {
+    case "schedule":
+      return "scheduled";
+    case "cancel":
+      return "cancelled";
+    default:
+      return "pending";
+  }
+};
 
 export const AppointmentForm = ({
   userId,
@@ -44,7 +56,6 @@ export const AppointmentForm = ({
   const { primaryPhysician, schedule, reason, note, cancellationReason } =
     appointment || {};
 
-  // Type annotation for form
   const form: UseFormReturn<z.infer<typeof AppointmentFormValidation>> =
     useForm<z.infer<typeof AppointmentFormValidation>>({
       resolver: zodResolver(AppointmentFormValidation),
@@ -57,22 +68,11 @@ export const AppointmentForm = ({
       },
     });
 
-  // Type annotation for onSubmit function
   const onSubmit = async (
     values: z.infer<typeof AppointmentFormValidation>
   ): Promise<void> => {
-    const isLoading = true; // Inline loading state for submit button
-
-    let status: Status;
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone; // Dynamically get the user's timezone
-
-    // Refactored status determination logic
-    status =
-      type === "schedule"
-        ? "scheduled"
-        : type === "cancel"
-        ? "cancelled"
-        : "pending";
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const status = determineStatus(type); // Use the utility function here
 
     try {
       if (type === "create" && patientId) {
@@ -82,7 +82,7 @@ export const AppointmentForm = ({
           primaryPhysician: values.primaryPhysician,
           schedule: new Date(values.schedule),
           reason: values.reason!,
-          status: status,
+          status,
           note: values.note,
         };
 
@@ -98,11 +98,11 @@ export const AppointmentForm = ({
         const appointmentToUpdate = {
           userId,
           appointmentId: appointment.$id!,
-          timeZone, // Ensure `timeZone` is included
+          timeZone,
           appointment: {
             primaryPhysician: values.primaryPhysician,
             schedule: new Date(values.schedule),
-            status: status,
+            status,
             cancellationReason: values.cancellationReason,
           },
           type,
@@ -117,21 +117,15 @@ export const AppointmentForm = ({
       }
     } catch (error) {
       console.error("Error submitting appointment:", error);
-
-      // Show a detailed error message in the console
       toast.error(
         `Error: ${
           error instanceof Error ? error.message : "An unknown error occurred."
         }`
       );
-
-      // Optionally, show a toast notification or alert here for user feedback
       toast.error(
         "There was an issue processing your appointment. Please try again."
       );
     }
-
-    // Inline the isLoading state for the button instead of using useState
   };
 
   const renderFormFields = () => {
@@ -208,7 +202,6 @@ export const AppointmentForm = ({
     );
   };
 
-  // Optimized button label assignment using a map
   const buttonLabels: Record<string, string> = {
     cancel: "Cancel Appointment",
     schedule: "Schedule Appointment",
@@ -232,7 +225,7 @@ export const AppointmentForm = ({
         {renderFormFields()}
 
         <SubmitButton
-          isLoading={false} // Directly pass false or the loading state inline
+          isLoading={false}
           className={`${
             type === "cancel" ? "shad-danger-btn" : "shad-primary-btn"
           } w-full`}
