@@ -117,14 +117,14 @@ export const AppointmentForm = ({
       }
     } catch (error) {
       console.error("Error submitting appointment:", error);
-      toast.error(
-        `Error: ${
-          error instanceof Error ? error.message : "An unknown error occurred."
-        }`
-      );
-      toast.error(
-        "There was an issue processing your appointment. Please try again."
-      );
+
+      if (error instanceof NetworkError) {
+        toast.error("Network error: Please check your connection.");
+      } else if (error instanceof ValidationError) {
+        toast.error("Validation error: Please correct the highlighted fields.");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     }
   };
 
