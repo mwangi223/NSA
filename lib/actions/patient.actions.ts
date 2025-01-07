@@ -29,23 +29,19 @@ export const createUser = async (user: CreateUserParams) => {
     );
     return parseStringify(newUser);
   } catch (error: any) {
-    // Check for existing user
-    if (error?.code === 409) {
-      console.warn(`User with email ${user.email} already exists.`);
-      const existingUser = await users.list([
-        Query.equal("email", [user.email]),
-      ]);
+    console.error("Error creating user:", error);
 
-      if (existingUser.users.length > 0) {
-        console.info("Returning existing user:", existingUser.users[0]);
-        return parseStringify(existingUser.users[0]);
-      }
+    // Check for specific error codes
+    if (error?.code === 409) {
+      console.warn("User already exists. Fetching existing user...");
+      const existingUser = await users.list([Query.equal("email", [user.email])]);
+      return existingUser.users[0];
     }
 
-    console.error("Failed to create a new user:", error.message || error);
     throw new Error("Unable to create user. Please try again later.");
   }
 };
+
 
 // GET USER
 export const getUser = async (userId: string) => {
