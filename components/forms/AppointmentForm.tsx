@@ -7,6 +7,7 @@ import { Dispatch, SetStateAction } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "react-toastify";
+import classNames from "classnames";
 
 import { SelectItem } from "@/components/ui/select";
 import { Doctors } from "@/constants";
@@ -24,16 +25,8 @@ import {
   updateAppointment,
 } from "@/lib/actions/appointment.actions";
 
-type AppointmentType = "create" | "schedule" | "cancel";
-
-const buttonLabels: Record<AppointmentType, string> = {
-  cancel: "Cancel Appointment",
-  schedule: "Schedule Appointment",
-  create: "Submit Appointment",
-};
-
 // Utility function for determining status
-const determineStatus = (type: AppointmentType): Status => {
+const determineStatus = (type: string): Status => {
   switch (type) {
     case "schedule":
       return "scheduled";
@@ -42,6 +35,14 @@ const determineStatus = (type: AppointmentType): Status => {
     default:
       return "pending";
   }
+};
+
+type AppointmentType = "create" | "schedule" | "cancel";
+
+const buttonLabels: Record<AppointmentType, string> = {
+  cancel: "Cancel Appointment",
+  schedule: "Schedule Appointment",
+  create: "Submit Appointment",
 };
 
 export const AppointmentForm = ({
@@ -208,6 +209,11 @@ export const AppointmentForm = ({
     );
   };
 
+  const buttonClass = classNames({
+    "shad-danger-btn w-full": type === "cancel",
+    "shad-primary-btn w-full": type !== "cancel",
+  });
+
   const buttonLabel = buttonLabels[type];
 
   return (
@@ -224,12 +230,7 @@ export const AppointmentForm = ({
 
         {renderFormFields()}
 
-        <SubmitButton
-          isLoading={false}
-          className={`${
-            type === "cancel" ? "shad-danger-btn" : "shad-primary-btn"
-          } w-full`}
-        >
+        <SubmitButton isLoading={false} className={buttonClass}>
           {buttonLabel}
         </SubmitButton>
       </form>
