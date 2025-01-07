@@ -56,23 +56,25 @@ export const AppointmentForm = ({
   const { primaryPhysician, schedule, reason, note, cancellationReason } =
     appointment || {};
 
+  const defaultValues = {
+    primaryPhysician: primaryPhysician || "",
+    schedule: schedule ? new Date(schedule) : new Date(Date.now()),
+    reason: reason || "",
+    note: note || "",
+    cancellationReason: cancellationReason || "",
+  };
+
   const form: UseFormReturn<z.infer<typeof AppointmentFormValidation>> =
     useForm<z.infer<typeof AppointmentFormValidation>>({
       resolver: zodResolver(AppointmentFormValidation),
-      defaultValues: {
-        primaryPhysician: primaryPhysician || "",
-        schedule: schedule ? new Date(schedule) : new Date(Date.now()),
-        reason: reason || "",
-        note: note || "",
-        cancellationReason: cancellationReason || "",
-      },
+      defaultValues,
     });
 
   const onSubmit = async (
     values: z.infer<typeof AppointmentFormValidation>
   ): Promise<void> => {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const status = determineStatus(type); // Use the utility function here
+    const status = determineStatus(type);
 
     try {
       if (type === "create" && patientId) {
