@@ -37,14 +37,6 @@ const determineStatus = (type: string): Status => {
   }
 };
 
-type AppointmentType = "create" | "schedule" | "cancel";
-
-const buttonLabels: Record<AppointmentType, string> = {
-  cancel: "Cancel Appointment",
-  schedule: "Schedule Appointment",
-  create: "Submit Appointment",
-};
-
 export const AppointmentForm = ({
   userId,
   patientId,
@@ -54,7 +46,7 @@ export const AppointmentForm = ({
 }: {
   userId: string;
   patientId: string;
-  type: AppointmentType;
+  type: "create" | "schedule" | "cancel";
   appointment?: Appointment;
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
@@ -211,6 +203,14 @@ export const AppointmentForm = ({
 
   const formFields = useMemo(() => renderFormFields(), [type, form.control]);
 
+  const buttonLabels: Record<string, string> = {
+    cancel: "Cancel Appointment",
+    schedule: "Schedule Appointment",
+    create: "Submit Appointment",
+  };
+
+  const buttonLabel = buttonLabels[type];
+
   const buttonClass = classNames({
     "shad-danger-btn w-full": type === "cancel",
     "shad-primary-btn w-full": type !== "cancel",
@@ -230,8 +230,11 @@ export const AppointmentForm = ({
 
         {formFields}
 
-        <SubmitButton isLoading={false} className={buttonClass}>
-          {buttonLabels[type]}
+        <SubmitButton
+          isLoading={form.formState.isSubmitting}
+          className={buttonClass}
+        >
+          {buttonLabel}
         </SubmitButton>
       </form>
     </Form>
